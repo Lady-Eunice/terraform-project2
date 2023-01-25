@@ -108,6 +108,7 @@ variable "destination-cidr_block" {
     description = "route destination cidr"
 }
 
+
 #provision elastic IP for public NAT Gateway
 variable "eip-Name" {
     default = "proj-jenk-EIP"

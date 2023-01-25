@@ -107,13 +107,13 @@ resource "aws_internet_gateway" "proj-jenk-igw" {
 
 # internet gateway association 
 resource "aws_route" "proj-jenk-igw-association" {
-  route_table_id            = aws_route_table.proj-jenk-private-route-table.id
+ route_table_id = aws_route_table.proj-jenk-public-route-table.id
   destination_cidr_block    = var.destination-cidr_block
   gateway_id                = aws_internet_gateway.proj-jenk-igw.id
 }
 
 
-# provision elastic IP for public NAT Gateway 
+/*# provision elastic IP for public NAT Gateway 
 resource "aws_eip" "proj-jenk-EIP" {
     vpc = true
     depends_on                = [aws_internet_gateway.proj-jenk-igw]
@@ -125,24 +125,24 @@ resource "aws_eip" "proj-jenk-EIP" {
 # public NAT gateway for private route table/subnets
 resource "aws_nat_gateway" "proj-jenk-Nat-gateway" {
   allocation_id = aws_eip.proj-jenk-EIP.id
-  subnet_id = aws_subnet.proj-jenk-private-sub1.id 
+   subnet_id      = aws_subnet.proj-jenk-public-sub2.id
 
   tags = {
     Name = var.NAT-Name
   }
-}
+}  
 
  /* # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
   depends_on = [aws_internet_gateway.example] */
 
-# NAT gateway to associate with private route table
+/*# NAT gateway to associate with private route table
 resource "aws_route" "proj-jenk-Nat-association" {
   route_table_id            = aws_route_table.proj-jenk-private-route-table.id
   destination_cidr_block    = var.NAT-destin-cidr_block
   gateway_id                = aws_nat_gateway.proj-jenk-Nat-gateway.id
 }
-
+*/
 
 /* Security Group resource with 2 ingress and 1 egress rules */
 resource "aws_security_group" "proj-jenk-sec-group" {
